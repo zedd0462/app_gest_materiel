@@ -46,9 +46,10 @@ app.use(session({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'static')));
+
 const corsConfig = {
     credentials: true,
-    origin: true,
+    origin: ["http://127.0.0.1:5173","http://localhost:5173","http://[::1]:5173"],
 };
 app.use(cors(corsConfig));
 
@@ -196,7 +197,12 @@ app.post('/addUser', function(request, response) {
 	if (valid) {
 		connection.query('INSERT INTO user(name, email, password, depId) VALUES (?,?,?,?);', [name, email, password, depId], function(error, results, fields) {
 			if (error) throw error;			
-			response.json({ added: true, errors: errors});
+			//send the id of the new user in the response
+			response.json({
+				added: true,
+				userId: results.insertId,
+				errors: errors,
+			});
 		});
 	} else {
 		response.json({ 
@@ -240,8 +246,13 @@ app.post('/addAdmin', function(request, response) {
 
 	if (valid) {
 		connection.query('INSERT INTO admin(name, email, password) VALUES (?,?,?);', [name, email, password], function(error, results, fields) {
-			if (error) throw error;			
-			response.json({ added: true, errors: errors});
+			if (error) throw error;	
+			//send the id of the new admin in the response
+			response.json({
+				added: true,
+				adminId: results.insertId,
+				errors: errors,
+			});
 		});
 	} else {
 		response.json({ 
