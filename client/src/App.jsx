@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import Login from './login'
+import Login from './Login.jsx'
+import AddUser from './AddUser.jsx'
 import { VStack, Center } from '@chakra-ui/react'
 import './App.css'
 
@@ -9,6 +10,7 @@ function App() {
     <div>
       <VStack alignItems='center'>
           <Login />
+          <AddUser />
       </VStack>
     </div>
   )

@@ -24,81 +24,74 @@ import {
 
 import { ChevronDownIcon , ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 
-function Login(){
+function AddUser(){
   const [show, setShow] = useState(false);
-  const [loginType, setLoginType] = useState('user');
-  const [loginId, setLoginId] = useState('');
-  const [loginPassword, setLoginPassword] = useState('');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [depId, setDepId] = useState('');
   const [alert, setAlert] = useState("");
   const [loading, setLoading] = useState(false);
-  const loginTypeText = [];
-  loginTypeText ['user'] = 'Utilisateur';
-  loginTypeText ['admin'] = 'Administrateur';
+  
   const handlePasswordClick = () => setShow(!show);
-
-  const loginIdHandler = (e) => {
-    setLoginId(e.target.value);
+  const nameHandler = (e) => {
+    setName(e.target.value);
   }
-  const loginPasswordHandler = (e) => {
-    setLoginPassword(e.target.value);
+  const emailHandler = (e) => {
+    setEmail(e.target.value);
+  }
+  const passwordHandler = (e) => {
+    setPassword(e.target.value);
+  }
+  const depIdHandler = (e) => {
+    setDepId(e.target.value);
   }
   const submithandler = (e) => {
+    e.preventDefault();
     setLoading(true);
     const baseUrl = import.meta.env.VITE_BASE_URL;
-    e.preventDefault();
+    console.log(name, email, password, depId);
     let toAppend = '';
     let data = null;
-    if(loginType === 'user'){
-      toAppend = '/userAuth';
-      data = {
-        userId: loginId,
-        password: loginPassword,
-      }
-    }else if(loginType === 'admin'){
-      toAppend = '/adminAuth';
-      data = {
-        adminId: loginId,
-        password: loginPassword,
-      }
-    }
-    let url = baseUrl + toAppend;
-    //console.log(data + " ::: " + JSON.stringify(data))
-    fetch(url, {
+    fetch(baseUrl + '/addUser', {
       credentials: 'include',
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        password: password,
+        depId: depId
+      })
     })
-    .then((response) => response.json())
-    .then((data) => {
-      if(data.loggedin){
-        setAlert("");
-        sessionStorage.setItem('loggedin', true);
-        sessionStorage.setItem('loginType', loginType);
-        sessionStorage.setItem('loginId', loginId);
-        setLoading(false);
-        console.log("Logged in !" + sessionStorage.getItem('loggedin') + " " + sessionStorage.getItem('loginType') + " " + sessionStorage.getItem('loginId')); 
+    .then(res => res.json())
+    .then(data => {
+      setLoading(false);
+      if(data.added){
+        setAlert(<Alert status="success">
+          <AlertIcon />
+          Utilisateur ajouté avec succès
+        </Alert>)
       }else{
-        console.log("Not logged in !"); 
-        setAlert(<Alert status='error'><AlertIcon />Identifiant / Mot de passe invalide !</Alert>);
-        setLoading(false);
+        setAlert(<Alert status="error">
+          <AlertIcon />
+          Une erreur s'est produite
+        </Alert>)
       }
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
+    }
+    )
 
   }
-
+  //TODO: make the app fetch department list and make the depId a dropdown
 
   return (
     <Container maxW="7xl" p={{ base: 5, md: 10 }}>
       <Center>
         <Stack spacing={4}>
           <Stack align="center">
-            <Heading fontSize="2xl">Se connecter</Heading>
+            <Heading fontSize="2xl">Ajouter un Utilisateur</Heading>
           </Stack>
           <VStack
             as="form"
@@ -113,14 +106,22 @@ function Login(){
           >
             <VStack spacing={4} w="100%">
               {alert}
-              <FormControl id="id" isRequired>
-                <FormLabel>Identifiant</FormLabel>
-                <Input rounded="md" type="text" onChange={loginIdHandler}/>
+              <FormControl id="name" isRequired>
+                <FormLabel>Nom</FormLabel>
+                <Input rounded="md" type="text" onChange={nameHandler}/>
+              </FormControl>
+              <FormControl id="email" isRequired>
+                <FormLabel>Email</FormLabel>
+                <Input rounded="md" type="text" onChange={emailHandler}/>
+              </FormControl>
+              <FormControl id ="depId" isRequired>
+                <FormLabel>Departement</FormLabel>
+                <Input rounded="md" type="text" onChange={depIdHandler}/>
               </FormControl>
               <FormControl id="password" isRequired>
                 <FormLabel>Mot de passe</FormLabel>
                 <InputGroup size="md">
-                  <Input rounded="md" type={show ? 'text' : 'password'} onChange={loginPasswordHandler}/>
+                  <Input rounded="md" type={show ? 'text' : 'password'} onChange={passwordHandler}/>
                   <InputRightElement width="4.5rem">
                     <Button
                       h="1.75rem"
@@ -139,19 +140,6 @@ function Login(){
               </FormControl>
             </VStack>
             <VStack w="100%" spacing={4}>
-              <Stack direction="row" justify="space-between" w="100%">
-                <Box>
-                    <Menu>
-                        <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-                            {loginTypeText[loginType]}
-                        </MenuButton>
-                        <MenuList>
-                            <MenuItem onClick={() => { setLoginType("user") }} >Utilisateur</MenuItem>
-                            <MenuItem onClick={() => { setLoginType("admin") }} >Administrateur</MenuItem>
-                        </MenuList>
-                    </Menu>
-                </Box>
-              </Stack>
               <Button
                 bg="green.300"
                 color="white"
@@ -172,4 +160,5 @@ function Login(){
   );
 };
 
-export default Login;
+
+export default AddUser;

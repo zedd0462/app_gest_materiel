@@ -6,6 +6,7 @@ const sMysql = require('sync-mysql');
 const session = require('express-session');
 const path = require('path');
 const util = require('util');
+const cors = require('cors');
 var validator = require('validator');
 var moment = require('moment');
 
@@ -38,17 +39,25 @@ const sConnection = new sMysql({
 app.use(session({
 	secret: process.env.SESSION_SECRET,
 	resave: true,
-	saveUninitialized: true
+	saveUninitialized: true,
+	
 }));
 //send responses as json
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'static')));
-app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
+const corsConfig = {
+    credentials: true,
+    origin: true,
+};
+app.use(cors(corsConfig));
+
+// app.use((req, res, next) => {
+//     res.header("Access-Control-Allow-Origin", "*");
+//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//     next();
+// });
+
 
 // validation functions 
 function isEmailValid(email){
@@ -62,6 +71,7 @@ function isEmailValid(email){
 	}
 	return !emailexists;
 }
+
 function isEmpty(val){
     if(val){
 		return false;
@@ -176,6 +186,10 @@ app.post('/addUser', function(request, response) {
         errors.errorPassword = true;
         valid = false
     }
+	if(!isInt(depId) && !errors.errorAuth){
+		errors.errorDepId = true;
+		valid = false;
+	}
     
     //TODO validation of depId & name
 
