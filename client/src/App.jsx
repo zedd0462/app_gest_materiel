@@ -4,6 +4,7 @@ import AddUser from './AddUser.jsx'
 import AddAdmin from './AddAdmin.jsx'
 import { VStack, Center } from '@chakra-ui/react'
 import './App.css'
+import AddTicket from './AddTicket.jsx'
 
 function App() {
 
@@ -13,6 +14,7 @@ function App() {
           <Login />
           <AddUser />
           <AddAdmin />
+          <AddTicket />
       </VStack>
     </div>
   )
