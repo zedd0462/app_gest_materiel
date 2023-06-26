@@ -1,22 +1,22 @@
-import { useState } from 'react'
-import Login from './Login.jsx'
-import AddUser from './AddUser.jsx'
-import AddAdmin from './AddAdmin.jsx'
-import { VStack, Center } from '@chakra-ui/react'
+import { useState, useEffect } from 'react'
 import './App.css'
-import AddTicket from './AddTicket.jsx'
+import Layout from './Layout.jsx'
+import Login from './Login.jsx'
+import { Box } from '@chakra-ui/react'
 
 function App() {
-
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth)
+  const [windowHeight, setWindowHeight] = useState(window.innerHeight)
+  useEffect(() => {
+    window.addEventListener('resize', () => {
+      setWindowWidth(window.innerWidth)
+      setWindowHeight(window.innerHeight)
+    })
+  }, [])
   return (
-    <div>
-      <VStack alignItems='center'>
-          <Login />
-          <AddUser />
-          <AddAdmin />
-          <AddTicket />
-      </VStack>
-    </div>
+    <Box w={windowWidth} h={windowHeight} bg="#b5d0ff" p="10">
+      <Layout/>
+    </Box>
   )
 }
 

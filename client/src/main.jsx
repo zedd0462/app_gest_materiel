@@ -1,13 +1,21 @@
 import React from 'react'
-import { ChakraProvider } from '@chakra-ui/react'
 import ReactDOM from 'react-dom/client'
-import App from './App'
+import App from './App.jsx'
 import './index.css'
+import { ChakraProvider, extendTheme } from "@chakra-ui/react"
+import '@fontsource-variable/montserrat';
 
-const rootElement = document.getElementById('root')
-ReactDOM.createRoot(rootElement).render(
+
+const theme = extendTheme({
+  fonts: {
+    heading: `'Montserrat Variable', sans-serif`,
+    body: `'Montserrat Variable', sans-serif`,
+  },
+})
+
+ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <App />
     </ChakraProvider>
   </React.StrictMode>,

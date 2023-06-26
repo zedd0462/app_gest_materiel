@@ -53,6 +53,10 @@ create table ticket(
  
 INSERT INTO admin(name, email, password) VALUES ('john smith','john@example.com','123456789');
 
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '';
+flush privileges;
+
+
 -- ----------------------------------------------- 	--
 -- 	Testing inserting and selecting statements		--													
 -- ----------------------------------------------- 	--

@@ -29,7 +29,7 @@ function Login(){
   const [loginType, setLoginType] = useState('user');
   const [loginId, setLoginId] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
-  const [alert, setAlert] = useState("");
+  const [alert, setAlert] = useState(<></>);
   const [loading, setLoading] = useState(false);
   const loginTypeText = [];
   loginTypeText ['user'] = 'Utilisateur';
@@ -74,8 +74,8 @@ function Login(){
     .then((response) => response.json())
     .then((data) => {
       if(data.loggedin){
-        setAlert("");
-        sessionStorage.setItem('loggedin', true);
+        setAlert(<></>);
+        sessionStorage.setItem('loggedin', "true");
         sessionStorage.setItem('loginType', loginType);
         sessionStorage.setItem('loginId', loginId);
         setLoading(false);
@@ -98,7 +98,7 @@ function Login(){
       <Center>
         <Stack spacing={4}>
           <Stack align="center">
-            <Heading fontSize="2xl">Se connecter</Heading>
+            <Heading fontSize="2xl" fontWeight="400">Se connecter</Heading>
           </Stack>
           <VStack
             as="form"
@@ -170,6 +170,6 @@ function Login(){
       </Center>
     </Container>
   );
-};
+}
 
 export default Login;
