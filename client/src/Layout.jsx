@@ -3,6 +3,7 @@ import Navbar from "./Navbar.jsx"
 import Logo from "./assets/Logo.jsx"
 import Sidebar from "./Sidebar.jsx"
 import Login from "./Login.jsx"
+import TicketTable from "./TicketTable.jsx"
 
 
 function Layout() {
@@ -37,8 +38,9 @@ function Layout() {
           <Sidebar/>
         </GridItem>
         <GridItem area={'main'}>
-          <Box bg="#f2f5fa" w="100%" h="100%" borderBottomRightRadius="30px">
-            <Login />
+          <Box bg="#f2f5fa" w="100%" h="100%" borderBottomRightRadius="30px" p="6">
+            {/* <Login /> */}
+            <TicketTable />
           </Box>
         </GridItem>
       </Grid>

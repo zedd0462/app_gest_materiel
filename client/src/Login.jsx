@@ -94,11 +94,11 @@ function Login(){
 
 
   return (
-    <Container maxW="7xl" p={{ base: 5, md: 10 }}>
+    <Container maxW="7xl" >
       <Center>
         <Stack spacing={4}>
           <Stack align="center">
-            <Heading fontSize="2xl" fontWeight="400">Se connecter</Heading>
+            <Heading fontSize="2xl" fontWeight="400" color="#0c0c4f">Se connecter</Heading>
           </Stack>
           <VStack
             as="form"
@@ -153,11 +153,11 @@ function Login(){
                 </Box>
               </Stack>
               <Button
-                bg="green.300"
-                color="white"
+                bg="#4a3dff"
                 _hover={{
-                  bg: 'green.500'
+                  bg: "#191552"
                 }}
+                color="white"
                 rounded="md"
                 w="100%"
                 type="submit"
