@@ -1,4 +1,4 @@
-import { Box, Center, Grid, GridItem } from "@chakra-ui/react"
+import { Box, Center, Grid, GridItem, Heading } from "@chakra-ui/react"
 import Navbar from "./Navbar.jsx"
 import Logo from "./assets/Logo.jsx"
 import Sidebar from "./Sidebar.jsx"
@@ -6,7 +6,7 @@ import Login from "./Login.jsx"
 import TicketTable from "./TicketTable.jsx"
 
 
-function Layout() {
+function Layout(props) {
   return (
     <Box 
     h='100%' 
@@ -40,7 +40,8 @@ function Layout() {
         <GridItem area={'main'}>
           <Box bg="#f2f5fa" w="100%" h="100%" borderBottomRightRadius="30px" p="6">
             {/* <Login /> */}
-            <TicketTable />
+            {props.children}
+            {/* <TicketTable /> */}
           </Box>
         </GridItem>
       </Grid>

@@ -28,9 +28,9 @@ function TicketTable() {
     const color2 = useColorModeValue("gray.400", "gray.400");
     return (   
         <VStack>
-            <Box alignItems="left" justifyContent="left" textAlign="left" bg="red">
+            <Box textAlign={"left"} w="100%">
                 <Heading fontSize="2xl" fontWeight="400" color="#0c0c4f" mb="3">Table Title</Heading>
-            </Box> 
+            </Box>
             <Flex
             w="full"
             alignItems="center"
@@ -160,12 +160,6 @@ function TicketTable() {
                                 colorScheme="green"
                                 icon={<AiFillEdit />}
                                 aria-label="Edit"
-                                />
-                                <IconButton
-                                colorScheme="red"
-                                variant="outline"
-                                icon={<BsFillTrashFill />}
-                                aria-label="Delete"
                                 />
                             </ButtonGroup>
                             </Td>

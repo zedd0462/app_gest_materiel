@@ -8,7 +8,7 @@ function NavItem(props){
         <MotionBox
             initial={{padding:"0",margin:"0"}}
             whileHover={{
-                scale:1.5,
+                scale:1.2,
                 padding:"8px",
                 cursor:"pointer"
             }}

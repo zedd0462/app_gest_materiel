@@ -457,6 +457,8 @@ app.get('/viewTickets', function(request, response) {
 	}
 });
 
+
+
 //view a single ticket for admin
 app.get('/viewTicket/:id', function(request, response) {
 	let errors = {
@@ -614,25 +616,73 @@ app.get('/viewTicketsAdmin', function(request, response) {
 	}
 });
 
-//view all the tickets that are not assigned yet
-app.get('/viewTicketsNotAssigned', function(request, response) {
+// //view all the tickets that are not assigned yet
+// app.get('/viewTicketsNotAssigned', function(request, response) {
+// 	let errors = {
+// 		errorNoTicketsFound:false,
+// 		errorAuth:false
+// 	}
+// 	let valid = true;
+// 	if(!(request.session.loggedin && request.session.type === "admin")){
+// 		console.log("Invalid attempt to view ticket (auth) :: " + request.session.loggedin + "::" + request.session.type)
+// 		errors.errorAuth = true;
+// 		valid = false
+// 	}
+// 	if(valid){
+// 		connection.query('SELECT * FROM ticket WHERE ticketId NOT IN (SELECT ticketId FROM fixing)', function (error, results, fields) {
+// 			if (error) throw error;
+// 			if(results.length > 0){
+// 				response.json({
+// 					result : results,
+// 					errors: errors
+// 				});
+// 			}else{
+// 				errors.errorNoTicketsFound = true;
+// 				response.json({
+// 					errors: errors
+// 				})
+// 			}
+// 		});
+// 	} else {
+// 		response.json({
+// 			errors: errors
+// 		})
+// 	}
+// });
+
+//view all the tickets that are not assigned yet, with pages, 10 tickets per page, order by id desc,  view the details of the user who created the ticket.
+app.get(['/viewTicketsNotAssigned/:page','/viewTicketsNotAssigned/'], function(request, response) {
 	let errors = {
 		errorNoTicketsFound:false,
 		errorAuth:false
 	}
 	let valid = true;
+	let page = request.params.page?request.params.page:1;	
+	let offset = (page - 1) * 10;
 	if(!(request.session.loggedin && request.session.type === "admin")){
 		console.log("Invalid attempt to view ticket (auth) :: " + request.session.loggedin + "::" + request.session.type)
 		errors.errorAuth = true;
 		valid = false
 	}
 	if(valid){
-		connection.query('SELECT * FROM ticket WHERE ticketId NOT IN (SELECT ticketId FROM fixing)', function (error, results, fields) {
+		connection.query('SELECT COUNT(*) AS total FROM ticket WHERE ticketId NOT IN (SELECT ticketId FROM fixing)', function (error, results, fields) {
 			if (error) throw error;
 			if(results.length > 0){
-				response.json({
-					result : results,
-					errors: errors
+				let total = results[0].total;
+				connection.query('SELECT ticketId,title,name,severity,dateSubmitted FROM ticket natural join user WHERE ticketId NOT IN (SELECT ticketId FROM fixing) ORDER BY ticketId DESC LIMIT 10 OFFSET ?', [offset], function (error, results, fields) {
+					if (error) throw error;
+					if(results.length > 0){
+						response.json({
+							result : results,
+							errors: errors,
+							total: total
+						});
+					}else{
+						errors.errorNoTicketsFound = true;
+						response.json({
+							errors: errors
+						})
+					}
 				});
 			}else{
 				errors.errorNoTicketsFound = true;
@@ -646,7 +696,32 @@ app.get('/viewTicketsNotAssigned', function(request, response) {
 			errors: errors
 		})
 	}
+	// if(valid){
+	// 	//query must have a join to get the user details
+	// 	connection.query('SELECT ticketId,title,name,severity,dateSubmitted FROM ticket natural join user WHERE ticketId NOT IN (SELECT ticketId FROM fixing) ORDER BY ticketId DESC LIMIT 10 OFFSET ?', [offset], function (error, results, fields) {
+	// 		if (error) throw error;
+	// 		if(results.length > 0){
+	// 			response.json({
+	// 				result : results,
+	// 				errors: errors
+	// 			});
+	// 		}else{
+	// 			errors.errorNoTicketsFound = true;
+	// 			response.json({
+	// 				errors: errors
+	// 			})
+	// 		}
+	// 	});
+	// } else {
+	// 	response.json({
+	// 		errors: errors
+	// 	})
+	// }
 });
+
+
+
+
 
 //view all the tickets that has a fixing
 app.get('/viewTicketsAssigned', function(request, response) {
